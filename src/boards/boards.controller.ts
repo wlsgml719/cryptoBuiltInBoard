@@ -8,9 +8,12 @@ import {
   Post,
   Query,
   UseInterceptors,
+  Param,
+  Put,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardsDto } from './dto/create-boards.dto';
+import { UpdateBoardsDto } from './dto/update-boards.dto';
 
 @Controller('boards')
 export class BoardsController {
@@ -39,5 +42,20 @@ export class BoardsController {
   @HttpCode(200)
   async getAllPosts(@Query('offset', ParseIntPipe) offset: number) {
     return await this.boardService.getAllPosts(offset);
+  }
+
+  /**
+   * @url PUT '/api/boards'
+   * @param boardId 수정할 게시글 아이디
+   * @description 게시글의 내용을 수정합니다 {제목, 본문, 비밀번호}
+   * @returns 201 상태코드
+   */
+  @Put(':boardId')
+  @HttpCode(201)
+  async updatePost(
+    @Param('boardId', ParseIntPipe) boardId: number,
+    @Body() updateBoardsDto: UpdateBoardsDto,
+  ): Promise<void> {
+    return this.boardService.updatePost(boardId, updateBoardsDto);
   }
 }
