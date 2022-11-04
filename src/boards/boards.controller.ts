@@ -1,11 +1,13 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpCode,
   ParseIntPipe,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardsDto } from './dto/create-boards.dto';
@@ -32,6 +34,7 @@ export class BoardsController {
    * @description 게시글 아이디 기준으로 20개의 게시글을 조회합니다.
    * @returns 20개 게시글(최신순)
    */
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   @HttpCode(200)
   async getAllPosts(@Query('offset', ParseIntPipe) offset: number) {

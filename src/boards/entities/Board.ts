@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -16,9 +17,14 @@ export class Board {
   @Column({ type: 'text', name: 'content' })
   content: string;
 
+  @Exclude()
   @Column({ type: 'text', name: 'password' })
   password: string;
 
   @CreateDateColumn({ type: 'datetime', name: 'createdAt' })
   createdAt: Date;
+
+  constructor(partial: Partial<Board>) {
+    Object.assign(this, partial);
+  }
 }
