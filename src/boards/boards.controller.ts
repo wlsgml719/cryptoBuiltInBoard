@@ -15,6 +15,7 @@ import {
 import { BoardsService } from './boards.service';
 import { CreateBoardsDto } from './dto/create-boards.dto';
 import { UpdateBoardsDto } from './dto/update-boards.dto';
+import { Board } from './entities/Board';
 
 @Controller('boards')
 export class BoardsController {
@@ -41,7 +42,9 @@ export class BoardsController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   @HttpCode(200)
-  async getAllPosts(@Query('offset', ParseIntPipe) offset: number) {
+  async getAllPosts(
+    @Query('offset', ParseIntPipe) offset: number,
+  ): Promise<Board[]> {
     return await this.boardService.getAllPosts(offset);
   }
 
