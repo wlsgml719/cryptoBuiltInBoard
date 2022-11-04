@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Board } from './boards/entities/Board';
+import { BoardsModule } from './boards/boards.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { Board } from './boards/entities/Board';
         };
       },
     }),
+    BoardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
