@@ -32,4 +32,17 @@ export class BoardsService {
 
     await this.boardRepository.save(createBoardsDto);
   }
+
+  /**
+   * @param offset 조회할 게시글 아이디
+   * @description 게시글 아이디 기준으로 20개의 게시글을 조회합니다.
+   * @returns 20개 게시글(최신순)
+   */
+  async getAllPosts(offset: number) {
+    return await this.boardRepository.find({
+      order: { createdAt: 'DESC' },
+      skip: offset,
+      take: 20,
+    });
+  }
 }
