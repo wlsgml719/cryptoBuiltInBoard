@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   Param,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardsDto } from './dto/create-boards.dto';
@@ -57,5 +58,21 @@ export class BoardsController {
     @Body() updateBoardsDto: UpdateBoardsDto,
   ): Promise<void> {
     return this.boardService.updatePost(boardId, updateBoardsDto);
+  }
+
+  /**
+   * @url DELETE '/api/boards'
+   * @param boardId 삭제할 게시글 아이디
+   * @param password 게시글 비밀번호
+   * @description 게시글을 삭제합니다
+   * @returns 201 상태코드
+   */
+  @Delete(':boardId')
+  @HttpCode(201)
+  async deletePost(
+    @Param('boardId', ParseIntPipe) boardId: number,
+    @Body('password') password: string,
+  ): Promise<void> {
+    return await this.boardService.deletePost(boardId, password);
   }
 }

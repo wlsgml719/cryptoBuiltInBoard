@@ -96,4 +96,36 @@ export class BoardsService {
 
     await this.boardRepository.update(boardId, updateBoardsDto);
   }
+
+  /**
+   * @param boardId 삭제할 게시글 아이디
+   * @param password 게시글 비밀번호
+   * @description 게시글을 삭제합니다
+   * @returns 201 상태코드
+   */
+  async deletePost(boardId: number, password: string): Promise<void> {
+    // 요청된 아이디가 존재하는지 확인
+    const isExistPost = await this.boardRepository.findOneBy({ boardId });
+
+    // 존재하지않으면 404
+    if (!isExistPost) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: '존재하지않는 게시글입니다.',
+      });
+    }
+
+    // 요청된 비밀번호가 일치하는지 확인
+    const validate = await bcrypt.compare(password, isExistPost.password);
+
+    // 일치하지않으면 400
+    if (!validate) {
+      throw new BadRequestException({
+        statusCode: 400,
+        message: '비밀번호가 일치하지 않습니다.',
+      });
+    }
+
+    await this.boardRepository.delete(boardId);
+  }
 }
