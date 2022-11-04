@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBoardsDto } from './dto/create-boards.dto';
 import { Board } from './entities/Board';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class BoardsService {
@@ -16,7 +17,7 @@ export class BoardsService {
    * @description 비밀번호를 입력받아 게시글을 작성합니다.
    * @returns 생성된 게시글
    */
-  async createPost(createBoardsDto: CreateBoardsDto) {
+  async createPost(createBoardsDto: CreateBoardsDto): Promise<void> {
     const { password } = createBoardsDto;
     const isMatched = /(?=.*\d)./g.test(password);
 
@@ -26,5 +27,9 @@ export class BoardsService {
         message: '비밀번호는 최소 1개의 숫자를 포함해야합니다.',
       });
     }
+
+    createBoardsDto.password = await bcrypt.hash(password, 10);
+
+    await this.boardRepository.save(createBoardsDto);
   }
 }

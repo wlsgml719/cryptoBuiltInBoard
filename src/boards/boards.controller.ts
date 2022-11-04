@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardsDto } from './dto/create-boards.dto';
 
@@ -13,7 +13,8 @@ export class BoardsController {
    * @returns 생성된 게시글
    */
   @Post()
-  async createPost(@Body() createBoardsDto: CreateBoardsDto) {
+  @HttpCode(201)
+  async createPost(@Body() createBoardsDto: CreateBoardsDto): Promise<void> {
     return await this.boardService.createPost(createBoardsDto);
   }
 }
