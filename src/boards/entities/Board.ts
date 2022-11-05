@@ -17,14 +17,11 @@ export class Board {
   @Column({ type: 'text', name: 'content' })
   content: string;
 
+  // 비밀번호 컬럼이 조회되는 것을 방지합니다.
   @Exclude()
   @Column({ type: 'text', name: 'password' })
   password: string;
 
   @CreateDateColumn({ type: 'datetime', name: 'createdAt' })
   createdAt: Date;
-
-  constructor(partial: Partial<Board>) {
-    Object.assign(this, partial);
-  }
 }
